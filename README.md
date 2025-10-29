@@ -12,6 +12,8 @@ Compare the performance, efficiency, and characteristics of Convolutional Neural
 
 **Primary**: CIFAR-10 (60,000 32×32 colour images, 10 classes, balanced) -> downloaded via `torchvision.datasets.CIFAR10`
 
+![CIFAR Dataset](https://docs.pytorch.org/tutorials/_images/cifar10.png "CIFAR-10")
+
 - Small enough for reasonable training times
 - Complex enough to show meaningful differences
 - Standard benchmark dataset
@@ -20,7 +22,7 @@ Compare the performance, efficiency, and characteristics of Convolutional Neural
 
 ### MLP
 
-- **Input layer**: Flatten 32×32×3 = 3,072 input features
+- **Input layer**: Flatten 32×32×3 = 3,072 input features -> images of 32px by 32px of three  color channels (R,G,B)
 - **Hidden layers**: 2-3 fully connected layers (e.g., 512 → 256 → 128 neurons)
 - **Output layer**: 10 classes with softmax
 - **Activation**: ReLU
@@ -52,7 +54,44 @@ Compare the performance, efficiency, and characteristics of Convolutional Neural
 - Test accuracy
 - Per-class precision, recall, F1-score
 - Confusion matrices
+<table>
+  <thead>
+    <tr>
+      <th>CNN</th>
+      <th>MLP</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="center">
+        <img width="600" height="500" alt="CNN confusion matrix" src="https://github.com/user-attachments/assets/89872e62-673a-4684-be0c-b662ab2485fa" />
+      </td>
+      <td align="center">
+        <img width="600" height="500" alt="MLP confusion matrix" src="https://github.com/user-attachments/assets/e673fe28-930f-40ca-ac8b-3b58bb9e8110" />
+      </td>
+    </tr>
+  </tbody>
+</table>
+ 
 - Learning curves (training vs validation accuracy over epochs)
+<table>
+  <thead>
+    <tr>
+      <th>CNN</th>
+      <th>MLP</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="center">
+        <img width="640" height="480" alt="CNN learning_curves" src="https://github.com/user-attachments/assets/31ba3a2a-9f10-46fc-a25e-eb8dcda6d586" />
+      </td>
+      <td align="center">
+        <img width="640" height="480" alt="MLP learning_curves" src="https://github.com/user-attachments/assets/892ce7b4-0992-4938-9cc8-609077aa71a3" />
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 **Parameter Count**:
 
