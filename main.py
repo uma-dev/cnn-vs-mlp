@@ -1,5 +1,5 @@
 def main():
-    print("Hello from cnn-vs-mlp!")
+    print("CNN vs MLP")
 
 
 if __name__ == "__main__":
