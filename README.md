@@ -1,16 +1,16 @@
 ## Project Overview
 
-Compare the performance, efficiency, and characteristics of Convolutional Neural Networks (CNNs) versus Multi-Layer Perceptrons (MLPs) on image classification tasks.
+Compare the performance, efficiency, and characteristics of Convolutional Neural Networks (CNNs) versus Multi-Layer Perceptrons (MLPs) on **image classification** tasks.
 
 ## Objectives
 
-1. Implement both CNN and MLP architectures from using PyTorch.
-2. Compare models across three key metrics: **precision/accuracy**, **parameter count**, and **training time**
-3. Understand why CNNs are preferred for image data despite MLPs being universal function approximators
+- [x] 1. Implement both CNN and MLP architectures from using PyTorch.
+- [x] 2. Compare models across three key metrics: **precision/accuracy**, **parameter count**, and **training time**
+- [x] 3. Understand why CNNs are preferred for image data despite MLPs being universal function approximators
 
 ## Dataset
 
-**Primary**: CIFAR-10 (32×32 color images, 10 classes)
+**Primary**: CIFAR-10 (60,000 32×32 colour images, 10 classes, balanced) -> downloaded via `torchvision.datasets.CIFAR10`
 
 - Small enough for reasonable training times
 - Complex enough to show meaningful differences
@@ -18,7 +18,7 @@ Compare the performance, efficiency, and characteristics of Convolutional Neural
 
 ## Proposed Architectures
 
-### MLP Architecture
+### MLP
 
 - **Input layer**: Flatten 32×32×3 = 3,072 input features
 - **Hidden layers**: 2-3 fully connected layers (e.g., 512 → 256 → 128 neurons)
@@ -26,7 +26,7 @@ Compare the performance, efficiency, and characteristics of Convolutional Neural
 - **Activation**: ReLU
 - **Regularization**: Dropout (0.2-0.5) (optional)
 
-### CNN Architecture
+### CNN
 
 - **Convolutional blocks**: 3-4 blocks of Conv → ReLU → MaxPool
   - Block 1: 32 filters, 3×3 kernel
