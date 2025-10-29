@@ -9,7 +9,8 @@ wheels/
 # Virtual environments
 .venv
 
-
-# Experiment outputs
+# Dataset 
 data/
-experiments/
+
+# Outputs
+# experiments/
