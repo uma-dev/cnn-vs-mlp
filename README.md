@@ -274,3 +274,23 @@ Universal approximation is a math trophy, not a practical training strategy.
   - Build ~0.36M-param MLP
   - Compare to ~0.36M-param CNN
 - Add aggregated final tables + plots for report
+
+---
+
+## Why MLP is Faster per Epoch than CNN?
+
+| Aspect                   | MLP (Fully-Connected)                                    | CNN (Convolutional)                                              | Why This Makes MLP Faster                                                        |
+| ------------------------ | -------------------------------------------------------- | ---------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| Computation type         | Dense matrix multiplications (GEMM)                      | Convolutions + pooling + BN                                      | GEMM kernels are heavily optimized and run ridiculously fast on modern hardware. |
+| Data access pattern      | Simple, contiguous memory loads                          | Sliding windows over spatial grid                                | Convolutions require more complex memory access, increasing latency.             |
+| Operations per parameter | Straightforward multiply-accumulate per weight           | Reuse filters spatially, but each conv op touches many positions | Convs need more work per weight; MLP does simpler math per param.                |
+| Feature shape changes    | Constant vector dimension                                | Spatial reshaping (H×W), pooling, channel expansion              | CNN constantly reshapes tensors; MLP just stays flat → less overhead.            |
+| Kernel re-use            | None — one-shot matmul                                   | Repeated kernel application across spatial grid                  | Convs generate way more intermediate ops → slower.                               |
+| Framework optimization   | Dense ops are the most mature & optimized in BLAS/cuBLAS | Conv ops are fast but still more involved                        | MLP benefits more from decades of matmul optimization.                           |
+| Parallelism              | Uniform workload → easy to parallelize                   | Uneven spatial ops → more scheduling overhead                    | Uniform GEMM makes hardware utilization simpler & more efficient.                |
+| Forward complexity       | O(N × D)                                                 | O(N × k² × C × H × W)                                            | Conv includes kernel area + spatial dims → more computation.                     |
+| Backward pass            | Simple gradient of GEMM                                  | Gradient wrt filters & spatial positions                         | Conv backprop is more expensive than dense backprop.                             |
+
+**Short version:**  
+MLP = big matrix multiply → very fast  
+CNN = many sliding-window convolutions → more compute + more memory juggling → slower
