@@ -22,7 +22,7 @@ Compare the performance, efficiency, and characteristics of Convolutional Neural
 
 ### MLP
 
-- **Input layer**: Flatten 32×32×3 = 3,072 input features -> images of 32px by 32px of three  color channels (R,G,B)
+- **Input layer**: Flatten 32×32×3 = 3,072 input features -> images of 32px by 32px of three color channels (R,G,B)
 - **Hidden layers**: 2-3 fully connected layers (e.g., 512 → 256 → 128 neurons)
 - **Output layer**: 10 classes with softmax
 - **Activation**: ReLU
@@ -72,7 +72,7 @@ Compare the performance, efficiency, and characteristics of Convolutional Neural
     </tr>
   </tbody>
 </table>
- 
+
 - Learning curves (training vs validation accuracy over epochs)
 <table>
   <thead>
@@ -93,32 +93,184 @@ Compare the performance, efficiency, and characteristics of Convolutional Neural
   </tbody>
 </table>
 
-**Parameter Count**:
+# CNN vs MLP — CIFAR-10 Comparison
 
-- Total trainable parameters
+## Key Findings
 
-**Training Time**:
+| Model   | Params        | Test Accuracy | Total Train Time          | Avg Epoch Time |
+| ------- | ------------- | ------------- | ------------------------- | -------------- |
+| **CNN** | **357,258**   | **81.89%**    | **5724.77 s (~95.4 min)** | ~114–121 s     |
+| **MLP** | **1,738,890** | **46.22%**    | **4105.73 s (~68.4 min)** | ~80–86 s       |
 
-- Time per epoch
-- Total training time
-- Inference time (predictions per second)
-- GPU vs CPU performance (optional)
+- CNN reaches **~82% accuracy** with **5× fewer parameters**.
+- MLP lags at **~46%**, even with **5× more parameters**.
+- CNN converges best around **epoch ~47**; MLP plateaus ~epoch 16–25.
 
-**Parameter Matching Experiment**:
+---
 
-- Design an MLP and CNN with approximately the same number of parameters
-- Compare their performance to isolate architectural benefits
+## Parameter Count
 
-## Deliverables
+- CNN: **357,258 trainable parameters**
+- MLP: **1,738,890 trainable parameters**
 
-1. **Code Repository**:
-   - Well-documented Python notebooks/scripts
-   - Reproducible experiments with random seeds
-   - Requirements.txt for dependencies
+CNN is dramatically more parameter-efficient.
 
-2. **Technical Report** (8-10 pages):
-   - Introduction and motivation
-   - Methodology and architecture details
-   - Results with tables and visualizations
-   - Discussion of trade-offs
-   - Conclusion and insights
+---
+
+## Training Time
+
+### Time per epoch
+
+- CNN: ~114–121 s
+- MLP: ~80–86 s
+
+MLP is faster per epoch, but delivers weak accuracy.
+
+### Total training time
+
+- CNN: **5724.77 s**
+- MLP: **4105.73 s**
+
+### Inference time
+
+> **Not measured — see Future Work.**
+
+### CPU/GPU comparison
+
+> **Not measured — see Future Work.**
+
+---
+
+## Per-Class Performance (F1)
+
+### CNN — best to worst
+
+- automobile: **0.913**
+- ship: **0.887**
+- truck: **0.884**
+- deer: **0.810**
+- airplane: **0.826**
+- horse: **0.862**
+- frog: **0.860**
+- dog: **0.749**
+- bird: **0.737**
+- cat: **0.651**
+
+### MLP — best to worst
+
+- airplane: **0.560**
+- ship: **0.598**
+- truck: **0.526**
+- horse: **0.537**
+- frog: **0.501**
+- cat: **0.379**
+- bird: **0.279**
+- dog: **0.277**
+
+CNN dominates every class. MLP mostly guesses.
+
+---
+
+## Training Dynamics (Summary)
+
+**CNN**
+
+- Slow, consistent improvement
+- Best val ~0.8166 near epoch 47
+- Late epochs still give small gains
+
+**MLP**
+
+- Early improvement, then plateau
+- Best val ~0.50
+- Little meaningful progress after epoch 20
+
+---
+
+## Parameter Matching Experiment
+
+> **Not completed — see Future Work.**
+
+Intent:
+
+- Build an MLP and CNN with **similar parameter counts (~0.36M)**
+- Compare accuracy + timing to isolate architectural benefit
+
+---
+
+## Visual Comparisons (recommended)
+
+1. Learning curves (val_acc)
+   - CNN → ~0.81
+   - MLP → ~0.50
+
+2. Per-class F1 bar chart
+   - CNN wins everywhere
+
+3. Confusion matrices
+   - CNN structured
+   - MLP chaotic
+
+4. Param vs accuracy scatter
+   - CNN: **0.36M → 81.9%**
+   - MLP: **1.74M → 46.2%**
+
+---
+
+## Discussion of Trade-offs
+
+### Parameter efficiency
+
+CNN: **0.36M params → 81.9%**  
+MLP: **1.74M params → 46.2%**  
+MLP wastes ~1.3M extra parameters for much worse accuracy.
+
+### Accuracy
+
+CNN is dramatically stronger, especially on animal classes where MLP crumbles.
+
+### Training dynamics
+
+CNN learns meaningful features across depth; MLP flatlines early.
+
+### Time
+
+MLP is faster per epoch, but that “advantage” is functionally pointless since accuracy is poor.
+
+---
+
+## Why CNNs Beat MLPs on Images
+
+- **Images have spatial structure** — nearby pixels relate.
+- **MLPs ignore structure**, treating all pixels as unrelated.
+- **CNNs share weights** across the image, reducing parameter count.
+- **Local receptive fields** capture edges → textures → objects.
+- **Translation invariance**: a feature is recognized anywhere in the image.
+- MLPs must learn these things manually. Spoiler: they don’t.
+
+**Analogy:**  
+MLP = trying to understand a city by memorizing every intersection individually.  
+CNN = realizing city blocks repeat, so once you know one, you know many.
+
+Universal approximation is a math trophy, not a practical training strategy.
+
+---
+
+## Conclusion & Insights
+
+- CNNs deliver **massively superior accuracy** with **far fewer parameters**.
+- MLP simply lacks the inductive biases needed for vision.
+- Even with 5× more parameters, MLP fails to compete.
+- Outcome is straightforward:  
+  **CNNs are the correct tool for image tasks.**
+
+---
+
+## Future Work
+
+- Measure **inference time** (images/sec)
+- Compare **CPU vs GPU performance**
+- Complete **parameter-matching experiment**
+  - Build ~0.36M-param MLP
+  - Compare to ~0.36M-param CNN
+- Add aggregated final tables + plots for report
